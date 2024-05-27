@@ -25,6 +25,13 @@ class Ship:
         self.moving_left = False
         
         
+        
+    def center_ship(self):
+        """Center the ship on the screen"""
+        self.rect.midbottom = self.screen_rect.midbottom
+        self.x = float(self.rect.x)
+        
+        
     def update(self):
         """update ship's position based on movement flag"""
         if self.moving_right and self.rect.right < self.screen_rect.right:
