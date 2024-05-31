@@ -52,4 +52,3 @@ class Settings:
         
         
         self.alien_points = int(self.alien_points * self.score_scale)
-        
