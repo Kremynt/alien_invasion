@@ -8,6 +8,7 @@ from game_stats import GameStats
 from button import Button
 from bullet import Bullet
 from alien import Alien
+from scoreboard import ScoreBoard
 
 class AlienInvasion:
     """Overall class to manage game assets and behaviour"""
@@ -21,8 +22,10 @@ class AlienInvasion:
         
         pygame.display.set_caption("Alien Invasion")
         
-        #Create an instance to store statistics
+        #Create an instance to store statistics,
+        # and create a scoreboard
         self.stats = GameStats(self)
+        self.sb = ScoreBoard(self)
         
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
@@ -31,6 +34,8 @@ class AlienInvasion:
         
         #Make play button
         self.play_button = Button(self,"Play")
+        
+        
        
        
         
@@ -65,7 +70,14 @@ class AlienInvasion:
                 
         #Check for any bullets that have hit an alien
         # if so get rid of the bullet and the alien
-        collision = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        
+        
+        if collisions:
+            for aliens in collisions.values():
+                
+                self.stats.score += self.settings.alien_points * len(aliens)
+                self.sb.prep_score()
         
         if not self.aliens:
             #Destroy existing bullets and create new fleet
@@ -218,6 +230,7 @@ class AlienInvasion:
             self.settings.initialize_dynamic_settings()
             self.stats.reset_stats()
             self.stats.game_active = True
+            self.sb.prep_score()
             
             #get rid of any aliens and bullets
             self.aliens.empty()
@@ -236,6 +249,9 @@ class AlienInvasion:
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         self.aliens.draw(self.screen)
+        
+        #Draw the score information
+        self.sb.show_score()
         
         
         #Draw buttom when game is inactive
