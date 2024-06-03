@@ -78,6 +78,7 @@ class AlienInvasion:
                 
                 self.stats.score += self.settings.alien_points * len(aliens)
                 self.sb.prep_score()
+                self.sb.check_high_score()
         
         if not self.aliens:
             #Destroy existing bullets and create new fleet
@@ -209,7 +210,6 @@ class AlienInvasion:
             sleep(0.5)
         else:
             self.stats.game_active = False
-            pygame.mouse.set_visible(False)
             
         
     def _check_aliens_bottom(self):
